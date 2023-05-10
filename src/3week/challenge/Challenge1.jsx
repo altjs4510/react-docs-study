@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { produce } from "immer";
+import { useState } from "react";
 
 const initialProducts = [
   {
@@ -24,20 +24,25 @@ export default function ShoppingCart() {
 
   // FIXME: 이벤트핸들러를 구현하기
   function handleIncreaseClick(productId) {
-    // setProducts((prev)=>{
-    //   const newProducts = [...prev];
-    //   const targetIndex = newProducts.findIndex(({id}) => id === productId);
-    //   if ( targetIndex< 0) return;
-    //   const targetProduct = newProducts[targetIndex];
-    //   newProducts[targetIndex] = { ...targetProduct, count: targetProduct.count + 1};
-    //   return newProducts;
-    // })
+    setProducts((prev) => {
+      const newProducts = [...prev];
+      const targetIndex = newProducts.findIndex(({ id }) => id === productId);
+      if (targetIndex < 0) return prev;
+      const targetProduct = newProducts[targetIndex];
+      newProducts[targetIndex] = {
+        ...targetProduct,
+        count: targetProduct.count + 1,
+      };
+      return newProducts;
+    });
 
-    // immer : 불변성을 도와주는 라이브러리
-    setProducts(produce((draft)=>{
-      const targetIndex = draft.findIndex(({id}) => id === productId);
-      draft[targetIndex].count += 1;
-    }))
+    // Immer를 활용한 작성 방법
+    // setProducts(
+    //   produce((draft) => {
+    //     const product = draft.find(({ id }) => id === productId);
+    //     product.count += 1;
+    //   })
+    // );
   }
 
   return (
@@ -57,3 +62,21 @@ export default function ShoppingCart() {
     </ul>
   );
 }
+
+// my answer
+// function handleIncreaseClick(productId) {
+//   // setProducts((prev)=>{
+//   //   const newProducts = [...prev];
+//   //   const targetIndex = newProducts.findIndex(({id}) => id === productId);
+//   //   if ( targetIndex< 0) return;
+//   //   const targetProduct = newProducts[targetIndex];
+//   //   newProducts[targetIndex] = { ...targetProduct, count: targetProduct.count + 1};
+//   //   return newProducts;
+//   // })
+
+//   // immer : 불변성을 도와주는 라이브러리
+//   setProducts(produce((draft)=>{
+//     const targetIndex = draft.findIndex(({id}) => id === productId);
+//     draft[targetIndex].count += 1;
+//   }))
+// }
